@@ -4,13 +4,13 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "devstart": "set PORT=3001 & nodemon ./bin/www"
+    "devstart": "set PORT=3004 & nodemon ./bin/www"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
     "cors": "^2.8.5",
     "debug": "~2.6.9",
-    "express": "^4.16.4",
+    "express": "^4.17.2",
     "morgan": "~1.9.1",
     "mysql2": "^2.3.3",
     "sequelize": "^6.12.5"
