@@ -5,12 +5,33 @@ const sequelize = require("../models/index.js").sequelize;
 var initModels = require("../models/init-models");
 var models = initModels(sequelize);
 
+router.get("/usuarios", (req, res, next) => {
+  models.usuarios
+    .findAll()
+    .then(usuarios => res.send(usuarios))
+    .catch(err => res.status(400).send(err));
+});
+
+router.get("/usuarios/:idTipo", (req, res, next) => {
+  models.usuarios
+    .findAll({ where: { rol: req.params.idTipo } })
+    .then(usuarioSeccion => res.send(usuarioSeccion))
+    .catch(err => res.status(400).send(err));
+});
+
 router.get("/autos", (req, res, next) => {
   models.autos
     .findAll({ attributes: {} })
     .then(autos => {
       res.send(autos);
     })
+    .catch(err => res.status(400).send(err));
+});
+
+router.get("/autos/:id", (req, res, next) => {
+  models.autos
+    .findOne({ where: { id_auto: req.params.id } })
+    .then(autos => res.send(autos))
     .catch(err => res.status(400).send(err));
 });
 
