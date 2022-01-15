@@ -30,7 +30,7 @@ router.get("/autos", (req, res, next) => {
 
 router.get("/autos/:id", (req, res, next) => {
   models.autos
-    .findOne({ where: { id_auto: req.params.id } })
+    .findOne({ where: { propietario: req.params.id } })
     .then(autos => res.send(autos))
     .catch(err => res.status(400).send(err));
 });
