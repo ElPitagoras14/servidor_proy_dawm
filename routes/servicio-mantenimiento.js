@@ -16,6 +16,7 @@ router.get("/", (req, res, next) => {
 router.get("/conteo", (req, res, next) => {
   models.serviciomantenimiento
     .findAll({
+      limit: 6,
       attributes: [
         [sequelize.fn("COUNT", sequelize.col("*")), "num_pedidos"],
         [sequelize.fn("YEAR", sequelize.col("fecha_pedido")), "año"],
@@ -24,6 +25,10 @@ router.get("/conteo", (req, res, next) => {
       group: [
         sequelize.fn("YEAR", sequelize.col("fecha_pedido")),
         sequelize.fn("MONTH", sequelize.col("fecha_pedido")),
+      ],
+      order: [
+        [sequelize.fn("YEAR", sequelize.col("fecha_pedido")), "DESC"],
+        [sequelize.fn("MONTH", sequelize.col("fecha_pedido")), "DESC"],
       ],
     })
     .then(datos => res.send(datos))
