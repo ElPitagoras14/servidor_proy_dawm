@@ -6,14 +6,14 @@ var initModels = require("../models/init-models");
 var models = initModels(sequelize);
 
 //GET
-router.get("/usuarios", (req, res, next) => {
+router.get("/", (req, res, next) => {
   models.usuarios
     .findAll()
     .then(usuarios => res.send(usuarios))
     .catch(err => res.status(400).send(err));
 });
 
-router.get("/usuarios/:nom_rol", (req, res, next) => {
+router.get("/:nom_rol", (req, res, next) => {
   models.usuarios
     .findAll({ where: { rol: req.params.nom_rol } })
     .then(usuarioSeccion => res.send(usuarioSeccion))
@@ -25,7 +25,7 @@ router.get("/usuarios/:nom_rol", (req, res, next) => {
 //PUT
 
 //DELETE
-router.delete("/usuarios/:id", (req, res, next) => {
+router.delete("/:id", (req, res, next) => {
   models.usuarios
     .findOne({ where: { id_usuario: req.params.id } })
     .then(usuario => usuario.destroy())

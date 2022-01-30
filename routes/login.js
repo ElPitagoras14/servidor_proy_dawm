@@ -6,39 +6,44 @@ var initModels = require("../models/init-models");
 var models = initModels(sequelize);
 
 //GET
-router.get("/login", (req, res, next) => {
+router.get("/", (req, res, next) => {
   models.login
-    .findAll({
-      include: [{
-        association: 
-      }]
-    })
+    .findAll()
     .then(cliente => {
-        res.send(cliente);
+      res.send(cliente);
     })
     .catch(err => {
       res.send("Usuario no encontrado");
     });
 });
 //POST
-router.post("/login", (req, res, next) => {
+router.post("/", (req, res, next) => {
   const { email, password } = req.body;
   models.login
-    .findOne({ where: { correo: email, contrasenia: password } })
+    .findAll({
+      include: [
+        {
+          model: models.usuarios,
+          as: "usuario",
+          where: { correo: email },
+        },
+      ],
+      where: { correo: email, contrasenia: password },
+    })
     .then(cliente => {
       if (cliente) {
         res.send(cliente);
+      } else {
+        throw err;
       }
-      throw err;
     })
     .catch(err => {
-      res.send("Usuario no encontrado");
+      res.send({ Error: "Usuario no encontrado" });
     });
 });
 
 //PUT
 
 //DELETE
-
 
 module.exports = router;
