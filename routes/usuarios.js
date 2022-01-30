@@ -22,7 +22,30 @@ router.get("/:nom_rol", (req, res, next) => {
 
 //POST
 
+router.post("/", (req, res, next) => {
+  models.usuarios
+    .create(req.body)
+    .then(response => res.redirect("/"))
+    .catch(err => res.status(500).send(err));
+});
+
 //PUT
+router.put("/", (req, res, next) => {
+  models.usuarios
+    .update(
+      {
+        nombres: req.body.nombres,
+        apellidos: req.body.apellidos,
+        fecha_nacimiento: req.body.fecha_nacimiento,
+        celular: req.body.celular,
+        ubicacion: req.body.ubicacion,
+        correo: req.body.correo,
+      },
+      { where: { id_usuario: req.body.idx } }
+    )
+    .then(response => res.redirect("/"))
+    .catch(err => res.status(500).send(err));
+});
 
 //DELETE
 router.delete("/:id", (req, res, next) => {
