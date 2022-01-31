@@ -31,6 +31,13 @@ router.get("/id/:id",(req,res,next) => {
   .catch(err => res.status(400).send(err));
 });
 
+router.get("/ubicacion/:id",(req,res,next) => {
+  let id = req.params.id;
+  models.ubicacion.findOne({where:{id_ubicacion:id}})
+  .then(usuarioSeccion => res.send(usuarioSeccion))
+  .catch(err => res.status(400).send(err));
+  }
+)
 router.post("/token", verifyToken,(req,res,next)=>{
     jwt.verify(req.token,process.env.SECRET,(error,authData)=>{
       if(error){

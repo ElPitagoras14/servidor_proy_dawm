@@ -42,6 +42,12 @@ router.post("/", (req, res, next) => {
   res.redirect("/");
 });
 
+router.get("/conteo/:id",(req,res,next)=>{
+  let id = req.params.id;
+  models.serviciomantenimiento.findAll({where:{id_mecanico:id}})
+  .then(datos => res.send({ cantidad: datos.length}))
+})
+
 //PUT
 
 //DELETE
