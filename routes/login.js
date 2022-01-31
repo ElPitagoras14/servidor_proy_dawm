@@ -32,6 +32,7 @@ router.post("/", (req, res, next) => {
     })
     .then(cliente => {
       if (cliente) {
+        req.session.usuario = cliente;
         res.send(cliente);
       } else {
         throw err;

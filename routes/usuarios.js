@@ -9,7 +9,9 @@ var models = initModels(sequelize);
 router.get("/", (req, res, next) => {
   models.usuarios
     .findAll()
-    .then(usuarios => res.send(usuarios))
+    .then(usuarios => {
+      res.send(usuarios)
+    })
     .catch(err => res.status(400).send(err));
 });
 
