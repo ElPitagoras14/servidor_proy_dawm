@@ -16,7 +16,7 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: false
     },
     observacion_mecanico: {
-      type: DataTypes.STRING(100),
+      type: DataTypes.STRING(200),
       allowNull: false
     },
     foto: {

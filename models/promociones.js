@@ -22,6 +22,19 @@ module.exports = function (sequelize, DataTypes) {
         allowNull: false,
       },
     },
+<<<<<<< HEAD
+    titulo: {
+      type: DataTypes.STRING(100),
+      allowNull: false
+    },
+    descripcion: {
+      type: DataTypes.STRING(1000),
+      allowNull: false
+    },
+    precio: {
+      type: DataTypes.DECIMAL(5,2),
+      allowNull: false
+=======
     {
       sequelize,
       tableName: "promociones",
@@ -40,6 +53,7 @@ module.exports = function (sequelize, DataTypes) {
           fields: [{ name: "id_promocion" }],
         },
       ],
+>>>>>>> 4609e0bcee62770f3360ff04aac87eb96c7807bc
     }
   );
 };
