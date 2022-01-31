@@ -13,6 +13,7 @@ var autosRouter = require("./routes/autos");
 var promocionesRouter = require("./routes/promociones");
 var servgruaRouter = require("./routes/servicio-grua");
 var servmantRouter = require("./routes/servicio-mantenimiento");
+var tipomantenimientoRouter = require("./routes/tipomantenimiento");
 
 var app = express();
 
@@ -29,11 +30,12 @@ app.use(cookieSession({
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/", indexRouter);
-app.use("/autos", usuariosRouter);
+app.use("/usuarios", usuariosRouter);
 app.use("/login", loginRouter);
-app.use("/usuarios", autosRouter);
+app.use("/autos", autosRouter);
 app.use("/promociones", promocionesRouter);
 app.use("/serv_grua", servgruaRouter);
 app.use("/serv_mantenimiento", servmantRouter);
+app.use("/tipo_mantenimiento", tipomantenimientoRouter);
 
 module.exports = app;
