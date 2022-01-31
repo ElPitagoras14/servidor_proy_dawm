@@ -1,5 +1,7 @@
 var express = require("express");
 var router = express.Router();
+const jwt = require('jsonwebtoken');
+require('dotenv').config();
 
 const sequelize = require("../models/index.js").sequelize;
 var initModels = require("../models/init-models");
@@ -21,6 +23,25 @@ router.get("/:nom_rol", (req, res, next) => {
     .then(usuarioSeccion => res.send(usuarioSeccion))
     .catch(err => res.status(400).send(err));
 });
+
+router.get("/id/:id",(req,res,next) => {
+  let id = req.params.id;
+  models.usuarios.findOne({where:{id_usuario:id}})
+  .then(usuarioSeccion => res.send(usuarioSeccion))
+  .catch(err => res.status(400).send(err));
+});
+
+router.post("/token", verifyToken,(req,res,next)=>{
+    jwt.verify(req.token,process.env.SECRET,(error,authData)=>{
+      if(error){
+        res.sendStatus(403);
+      }else{
+        res.json({
+          authData
+        })
+      }
+    })
+})
 
 //POST
 
@@ -58,4 +79,17 @@ router.delete("/:id", (req, res, next) => {
   res.redirect("/");
 });
 
+
+//TOKEN
+// authorization: Bearer <token>
+function verifyToken(req,res,next){
+    const bearerHeader = req.headers['authorization'];
+    if(typeof bearerHeader != 'undefined'){
+        const bearerToken = bearerHeader.split(" ")[1];
+        req.token = bearerToken;
+        next();
+    }else{
+      res.sendStatus(403);
+    }
+}
 module.exports = router;
