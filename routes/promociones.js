@@ -15,11 +15,23 @@ router.get("/", (req, res, next) => {
 
 //POST
 router.post("/", (req, res, next) => {
-  models.promociones.create(req.body);
-  res.redirect("/");
+  models.promociones
+    .create(req.body)
+    .then(response => res.redirect("/"))
+    .catch(err => res.status(500).send(err));
 });
 
 //PUT
+router.put("/", (req, res, next) => {
+  models.update(
+    {
+      titulo: req.body.titulo,
+      descripcion: req.body.descripcion,
+      precio: req.body.precio,
+    },
+    { where: { id_promocion: req.body.id } }
+  );
+});
 
 //DELETE
 router.delete("/:id", (req, res, next) => {
