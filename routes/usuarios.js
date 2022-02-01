@@ -86,6 +86,39 @@ router.delete("/:id", (req, res, next) => {
   res.redirect("/");
 });
 
+//Registrar
+router.put("/registro",(req,res,next)=>{
+  models.login.create({
+    correo:req.body.correo,
+    contrasenia:req.body.contrasenia
+  });
+
+  models.ubicacion.create({
+    provincia:req.body.provincia,
+    ciudad:req.body.ciudad,
+    referencia:req.body.referencia
+  }).then(response => {
+    models.usuarios.create({
+      cedula:req.body.cedula,
+      nombres:req.body.nombre,
+      apellidos:req.body.apellido,
+      fecha_nacimiento:req.body.fecha,
+      foto:'',
+      celular:req.body.celular,
+      rol:req.body.rol,
+      correo:req.body.correo,
+      ubicacion:response.dataValues.id_ubicacion
+    })
+  })
+  .then(response => res.send({"Usuario":"creado"}))
+  .catch(err => res.status(400).send(err));
+});
+
+router.put("/registrarUbicacion",(req,res,next)=>{
+  sequelize.query(`Insert into Ubicacion(id_ubicacion,provincia,ciudad,referencia) values (Default, '${req.body.provincia}','${req.body.ciudad}','${req.body.referencia}')`).catch(error => {
+    res.status(400).send(error)});
+});
+
 
 //TOKEN
 // authorization: Bearer <token>

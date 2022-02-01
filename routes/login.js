@@ -51,7 +51,13 @@ router.post("/", (req, res, next) => {
 });
 
 //PUT
-
+router.put("/",(req,res,next)=>{
+  models.login.create({
+    correo:req.body.correo,
+    contrasenia:req.body.contrasenia
+  }).then(response => res.redirect("/"))
+  .catch(err => console.log(err));
+})
 //DELETE
 
 
