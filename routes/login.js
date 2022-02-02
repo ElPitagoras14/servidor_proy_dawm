@@ -1,3 +1,4 @@
+var nodemailer = require('nodemailer');
 var express = require("express");
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
@@ -72,4 +73,35 @@ function generateAccessToken(user){
     expiresIn:60*60*24
   });
 }
+
+const transporter = nodemailer.createTransport({
+    host: "smtp.gmail.com",
+    port: 465,
+    secure: true, // true for 465, false for other ports
+    auth: {
+      user: "gruasyerovibot@gmail.com", // generated ethereal user
+      pass: "ytgvwrctyacmstvu", // generated ethereal password
+    },
+});
+
+transporter.verify().then(()=>{
+    console.log("Ready for send emails");
+});
+
+router.post("/email",(req,res,next)=>{
+      // send mail with defined transport object
+    transporter.sendMail({
+    from: `${req.body.correo} <gruasyerovibot@gmail.com>`, // sender address
+    to: "geovanny_rl20@hotmail.com", // list of receivers
+    subject: "Solicitud de contacto", // Subject line
+    html: `<b>Has recibido una solicitud de contacto para Gruas Yerovi</b><br>
+            <b>El mensaje es el siguiente:</b><br>
+            Nombre: <i>${req.body.nombre}</i><br>
+            Correo: <i>${req.body.correo}</i><br>
+            Nacido en: <i>${req.body.fecha}</i><br>
+            Origen: <i>${req.body.origen}</i><br>
+            Mensaje: <b>${req.body.mensaje}</b>
+        `, // html body
+  }).catch(err => console.log(err));
+})
 module.exports = router;
