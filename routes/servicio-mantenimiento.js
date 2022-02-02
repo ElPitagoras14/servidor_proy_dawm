@@ -42,14 +42,37 @@ router.post("/", (req, res, next) => {
   res.redirect("/");
 });
 
-router.get("/conteo/:id",(req,res,next)=>{
+router.get("/conteo/:id", (req, res, next) => {
   let id = req.params.id;
-  models.serviciomantenimiento.findAll({where:{id_mecanico:id}})
-  .then(datos => res.send({ cantidad: datos.length}))
-})
+  models.serviciomantenimiento
+    .findAll({ where: { id_mecanico: id } })
+    .then(datos => res.send({ cantidad: datos.length }));
+});
 
 //PUT
+router.put("/", (req, res, next) => {
+  models.serviciomantenimiento
+    .update({
+      id_auto: req.body.id_auto,
+      id_mecanico: req.body.id_mecanico,
+      tipo_movilizacion: req.body.tipo_movilizacion,
+      fecha_pedido: req.body.fecha_pedido,
+      precio_total: req.body.precio_total,
+      id_horario: req.body.id_horario,
+    })
+    .then(response => res.redirect("/"))
+    .catch(err => res.status(500).send(err));
+});
 
 //DELETE
+router.delete("/", (req, res, next) => {
+  models.serviciomantenimiento
+    .findOne({ where: { id_mantenimiento: req.body.id_mantenimiento } })
+    .then(servicio => {
+      servicio.destroy();
+      res.redirect("/");
+    })
+    .catch(err => res.status(500).send(err));
+});
 
 module.exports = router;

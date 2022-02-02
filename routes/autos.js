@@ -29,14 +29,29 @@ router.post("/", (req, res, next) => {
 });
 
 //PUT
+router.put("/", (req, res, next) => {
+  models.autos
+    .update({
+      placa: req.body.placa,
+      marca: req.body.placa,
+      modelo: req.body.modelo,
+      color: req.body.color,
+      clave_llave: req.body.clave_llave,
+      propietario: req.body.propietario,
+    })
+    .then(response => res.redirect("/"))
+    .catch(err => res.status(500).send(err));
+});
 
 //DELETE
 router.delete("/:id", (req, res, next) => {
   models.autos
     .findOne({ where: { id_auto: req.params.id } })
-    .then(auto => auto.destroy())
+    .then(auto => {
+      auto.destroy();
+      res.redirect("/");
+    })
     .catch(err => res.status(400).send(err));
-  res.redirect("/");
 });
 
 module.exports = router;

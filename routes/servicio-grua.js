@@ -37,12 +37,43 @@ router.get("/conteo", (req, res, next) => {
 
 //POST
 router.post("/", (req, res, next) => {
-  models.serviciogrua.create(req.body);
-  res.redirect("/");
+  models.serviciogrua
+    .create(req.body)
+    .then(response => res.redirect("/"))
+    .catch(err => res.status(403).send(err));
 });
 
 //PUT
+router.put("/", (req, res, next) => {
+  models.serviciogrua
+    .update(
+      {
+        id_conductor: req.body.id_conductor,
+        id_auto: req.body.id_auto,
+        ubicacion_latitud: req.body.ubicacion_latitud,
+        ubicacion_longitud: req.body.ubicacion_longitud,
+        fecha: req.body.fecha,
+        hora_inicio: req.body.hora_inicio,
+        hora_final: req.body.hora_final,
+        id_promocion: req.body.id_promocion,
+      },
+      { where: { id_servicio_grua: id_servicio_grua } }
+    )
+    .then(response => res.redirect("/"))
+    .catch(err => res.status(500).send(err));
+});
 
 //DELETE
+router.delete("/", (req, res, next) => {
+  models.serviciogrua
+    .findOne({
+      where: { id_servicio_grua: req.body.id_servicio_grua },
+    })
+    .then(servicio => {
+      servicio.destroy();
+      res.redirect("/");
+    })
+    .catch(err => res.status(500).send(err));
+});
 
 module.exports = router;
