@@ -13,6 +13,24 @@ router.get("/", (req, res, next) => {
     .catch(err => res.status(400).send(err));
 });
 
+router.get("/reporte",(req,res,next)=>{
+  models.serviciomantenimiento.findAll({
+    include:[{
+      model:models.usuarios,
+      as:"usuarios",
+      association:"id_mecanico_usuario"
+    },{
+      model:models.autos,
+      as:"autos",
+      association:"id_auto_auto"
+    }]
+  })
+  .then(manteminiento =>{
+    res.send(manteminiento);
+  })
+})
+
+
 router.get("/conteo", (req, res, next) => {
   models.serviciomantenimiento
     .findAll({
