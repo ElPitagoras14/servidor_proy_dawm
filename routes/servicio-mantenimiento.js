@@ -96,7 +96,7 @@ router.get("/conteo/:id", (req, res, next) => {
 });
 
 //POST: PROCESOS
-router.post("/nuevoproceso/", (req, res, next) => {
+router.post("/nuevoproceso", (req, res, next) => {
   var idprincipal = 0;
   let consulta = `
   SELECT GENERALT.id_proceso_siguiente FROM 
@@ -113,47 +113,41 @@ router.post("/nuevoproceso/", (req, res, next) => {
   WHERE id_auto = ${req.body.id_auto}
   ORDER BY id_proceso_siguiente DESC LIMIT 1;
   `;
-  
-   sequelize
+  sequelize
     .query(consulta, {
       type: sequelize.QueryTypes.SELECT,
     })
     .then(anterior => {
       idprincipal = anterior[0].id_proceso_siguiente;
-        models.procesomantenimiento.create({
-        fecha_actual: req.body.fecha,
-        hora_actual: req.body.hora,
-        observacion_mecanico: req.body.observacion,
+      models.procesomantenimiento.create({
+        fecha_actual: req.body.fecha_actual,
+        hora_actual: req.body.hora_actual,
+        observacion_mecanico: req.body.observacion_mecanico,
         tipoMantenimiento: 2,
-        id_proceso_anterior: idprincipal
-        });
+        id_proceso_anterior: idprincipal,
+      });
 
       let consulta2 = `
       select id_proceso from procesomantenimiento order by id_proceso desc limit 1;
       `;
       sequelize
-      .query(consulta2, {
-        type: sequelize.QueryTypes.SELECT,
-      })
-      .then(idupdate => {
-        console.log("llegó")
-        res.send(idupdate);
-        models.procesomantenimiento.update(
-          {
-          id_proceso_siguiente: idupdate[0].id_proceso + 1
-          },
-          { 
-          where: { id_proceso: idprincipal} 
-          }
+        .query(consulta2, {
+          type: sequelize.QueryTypes.SELECT,
+        })
+        .then(idupdate => {
+          console.log("llegó");
+          res.send(idupdate);
+          models.procesomantenimiento.update(
+            {
+              id_proceso_siguiente: idupdate[0].id_proceso + 1,
+            },
+            {
+              where: { id_proceso: idprincipal },
+            }
           );
         });
-      
     })
     .catch(error => res.status(400).send(error));
-    
-    
-    
-    
 });
 
 //PUT
@@ -170,7 +164,6 @@ router.put("/", (req, res, next) => {
     .then(response => res.redirect("/"))
     .catch(err => res.status(500).send(err));
 });
-
 
 //DELETE
 router.delete("/", (req, res, next) => {
