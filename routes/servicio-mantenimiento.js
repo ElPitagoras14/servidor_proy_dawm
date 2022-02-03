@@ -119,7 +119,17 @@ router.post("/nuevoproceso/", (req, res, next) => {
       type: sequelize.QueryTypes.SELECT,
     })
     .then(anterior => {
-      idprincipal = anterior[0].id_proceso_siguiente;
+        idprincipal = anterior[0].id_proceso_siguiente;
+        if (idprincipal == null){
+            models.procesomantenimiento.create({
+            fecha_actual: req.body.fecha,
+            hora_actual: req.body.hora,
+            observacion_mecanico: req.body.observacion,
+            tipoMantenimiento: 2
+            });
+        }else{
+          
+        
         models.procesomantenimiento.create({
         fecha_actual: req.body.fecha,
         hora_actual: req.body.hora,
@@ -147,6 +157,7 @@ router.post("/nuevoproceso/", (req, res, next) => {
           }
           );
         });
+      }
       
     })
     .catch(error => res.status(400).send(error));
