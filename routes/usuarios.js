@@ -27,6 +27,20 @@ router.get("/auto/:id", (req, res, next) => {
     .catch(err => res.send(err));
 });
 
+router.get("/ubicacion/:id", (req, res, next) => {
+  models.usuarios
+    .findOne({
+      where: { id_usuario: req.params.id },
+      include: {
+        model: models.ubicacion,
+        as: "ubicacion_ubicacion",
+        foreignKey: "ubicacion",
+      },
+    })
+    .then(ubicacion => res.send(ubicacion))
+    .catch(err => res.send(err));
+});
+
 router.get("/:nom_rol", (req, res, next) => {
   models.usuarios
     .findAll({ where: { rol: req.params.nom_rol } })
