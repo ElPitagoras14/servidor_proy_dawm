@@ -13,23 +13,26 @@ router.get("/", (req, res, next) => {
     .catch(err => res.status(400).send(err));
 });
 
-router.get("/reporte",(req,res,next)=>{
-  models.serviciomantenimiento.findAll({
-    include:[{
-      model:models.usuarios,
-      as:"usuarios",
-      association:"id_mecanico_usuario"
-    },{
-      model:models.autos,
-      as:"autos",
-      association:"id_auto_auto"
-    }]
-  })
-  .then(manteminiento =>{
-    res.send(manteminiento);
-  })
-})
-
+router.get("/reporte", (req, res, next) => {
+  models.serviciomantenimiento
+    .findAll({
+      include: [
+        {
+          model: models.usuarios,
+          as: "usuarios",
+          association: "id_mecanico_usuario",
+        },
+        {
+          model: models.autos,
+          as: "autos",
+          association: "id_auto_auto",
+        },
+      ],
+    })
+    .then(manteminiento => {
+      res.send(manteminiento);
+    });
+});
 
 router.get("/conteo", (req, res, next) => {
   models.serviciomantenimiento
@@ -67,13 +70,15 @@ router.get("/procesos/:id_auto", (req, res, next) => {
   JOIN PROCESOMANTENIMIENTO PM ON PM.ID_PROCESO = GENERALT.ID_PROCESO_SIGUIENTE
   JOIN USUARIOS U ON SM.ID_MECANICO = U.ID_USUARIO
   WHERE id_auto = ${req.params.id_auto}
-  ORDER BY INICIO`
-  sequelize.query(consulta,{
-    type: sequelize.QueryTypes.SELECT,
-  }).then(procesosfiltrados => {
-    res.send(procesosfiltrados)
- })
- .catch(error => res.status(400).send(error))
+  ORDER BY INICIO`;
+  sequelize
+    .query(consulta, {
+      type: sequelize.QueryTypes.SELECT,
+    })
+    .then(procesosfiltrados => {
+      res.send(procesosfiltrados);
+    })
+    .catch(error => res.status(400).send(error));
 });
 
 //POST
