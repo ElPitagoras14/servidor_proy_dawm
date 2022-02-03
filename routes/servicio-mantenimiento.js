@@ -118,17 +118,40 @@ router.post("/nuevoproceso", (req, res, next) => {
       type: sequelize.QueryTypes.SELECT,
     })
     .then(anterior => {
-        idprincipal = anterior[0].id_proceso_siguiente;
-        if (idprincipal == null){
-            models.procesomantenimiento.create({
+        console.log(anterior);
+        
+        if (anterior.length == 0) {
+           
+          models.procesomantenimiento.create({
             fecha_actual: req.body.fecha,
             hora_actual: req.body.hora,
             observacion_mecanico: req.body.observacion,
             tipoMantenimiento: 2
             });
+          let consulta2 = `
+          select id_proceso from procesomantenimiento order by id_proceso desc limit 1;
+          `;
+          sequelize
+            .query(consulta2, {
+              type: sequelize.QueryTypes.SELECT,
+            })
+            .then(idupdate => {
+              console.log("llegó");
+              res.send(idupdate);
+              models.serviciomantenimiento.create({
+                id_auto: req.body.id_auto,
+                id_mecanico: 550,
+                tipo_movilizacion: 0,
+                fecha_pedido: req.body.fecha_pedido,
+                precio_total: 28.20,
+                id_horario: 4,
+                id_proceso_inicial: idupdate[0].id_proceso + 1
+              }); 
+            });
+            
         }else{
           
-        
+        idprincipal = anterior[0].id_proceso_siguiente;
         models.procesomantenimiento.create({
         fecha_actual: req.body.fecha,
         hora_actual: req.body.hora,
