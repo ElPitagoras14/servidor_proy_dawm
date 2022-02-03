@@ -33,11 +33,11 @@ router.put("/", (req, res, next) => {
   models.autos
     .update({
       placa: req.body.placa,
-      marca: req.body.placa,
+      marca: req.body.marca,
       modelo: req.body.modelo,
       color: req.body.color,
-      clave_llave: req.body.clave_llave,
-      propietario: req.body.propietario,
+      clave_llave: req.body.clave,
+      propietario: req.body.id_propietario,
     })
     .then(response => res.redirect("/"))
     .catch(err => res.status(500).send(err));
