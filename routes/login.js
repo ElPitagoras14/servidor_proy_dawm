@@ -92,7 +92,7 @@ router.post("/email",(req,res,next)=>{
       // send mail with defined transport object
     transporter.sendMail({
     from: `${req.body.correo} <gruasyerovibot@gmail.com>`, // sender address
-    to: "joel.choez@hotmail.com", // list of receivers
+    to: "geovanny_rl14@hotmail.com", // list of receivers
     subject: "Solicitud de contacto", // Subject line
     html: `<b>Has recibido una solicitud de contacto para Gruas Yerovi</b><br>
             <b>El mensaje es el siguiente:</b><br>
