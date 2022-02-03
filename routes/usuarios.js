@@ -78,17 +78,23 @@ router.post("/token", verifyToken, (req, res, next) => {
 //POST
 
 router.post("/", (req, res, next) => {
+  console.log("SI");
   models.usuarios
     .create(req.body)
-    .then(response => res.redirect("/"))
+    .then(response => res.redirect("/dash"))
     .catch(err => res.status(500).send(err));
 });
 
 //PUT
 router.put("/", (req, res, next) => {
-
-  sequelize.query(`update login set correo = '${req.body.correo}' where correo = '${req.body.correo_anterior}'`);
-  sequelize.query(`update usuarios set celular='${req.body.celular}', nombres='${req.body.nombres}',apellidos='${req.body.apellidos}',fecha_nacimiento='${req.body.fecha_nacimiento}', correo = '${req.body.correo}' where id_usuario = ${req.body.idx}`).catch(err => console.log(err));
+  sequelize.query(
+    `update login set correo = '${req.body.correo}' where correo = '${req.body.correo_anterior}'`
+  );
+  sequelize
+    .query(
+      `update usuarios set celular='${req.body.celular}', nombres='${req.body.nombres}',apellidos='${req.body.apellidos}',fecha_nacimiento='${req.body.fecha_nacimiento}', correo = '${req.body.correo}' where id_usuario = ${req.body.idx}`
+    )
+    .catch(err => console.log(err));
 });
 
 //DELETE
