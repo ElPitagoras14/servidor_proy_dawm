@@ -37,6 +37,7 @@ router.get("/conteo", (req, res, next) => {
 
 //POST
 router.post("/", (req, res, next) => {
+  console.log(req.body);
   models.serviciogrua
     .create(req.body)
     .then(response => res.redirect("/"))
