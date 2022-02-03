@@ -57,7 +57,32 @@ router.get("/conteo", (req, res, next) => {
     .catch(err => res.status(400).send(err));
 });
 
+//PARA EL CLIENTE
 router.get("/procesos/:id_auto", (req, res, next) => {
+  let consulta = `SELECT id_auto, GENERALT.id_proceso_siguiente, fecha_actual, hora_actual, observacion_mecanico, CONCAT(U.NOMBRES,' ',U.APELLIDOS) mecanico FROM 
+  ((SELECT id_proceso inicio, id_proceso id_proceso_siguiente FROM PROCESOMANTENIMIENTO P LIMIT 50)
+  UNION
+  SELECT id_proceso inicio, id_proceso_siguiente FROM PROCESOMANTENIMIENTO P WHERE P.ID_PROCESO_ANTERIOR IS NULL
+  UNION
+  SELECT INICIO.inicio, P.id_proceso_siguiente FROM PROCESOMANTENIMIENTO P, 
+  (SELECT id_proceso inicio, id_proceso_siguiente FROM PROCESOMANTENIMIENTO P WHERE P.ID_PROCESO_ANTERIOR IS NULL) INICIO 
+  WHERE INICIO.ID_PROCESO_SIGUIENTE = P.ID_PROCESO AND P.ID_PROCESO_SIGUIENTE IS NOT NULL) GENERALT 
+  JOIN SERVICIOMANTENIMIENTO SM ON SM.ID_PROCESO_INICIAL = GENERALT.INICIO
+  JOIN PROCESOMANTENIMIENTO PM ON PM.ID_PROCESO = GENERALT.ID_PROCESO_SIGUIENTE
+  JOIN USUARIOS U ON SM.ID_MECANICO = U.ID_USUARIO
+  WHERE id_auto = ${req.params.id_auto}
+  ORDER BY INICIO`;
+  sequelize
+    .query(consulta, {
+      type: sequelize.QueryTypes.SELECT,
+    })
+    .then(procesosfiltrados => {
+      res.send(procesosfiltrados);
+    })
+    .catch(error => res.status(400).send(error));
+});
+//PARA EL MECANICO
+router.get("/procesosmecanico/:id_auto", (req, res, next) => {
   let consulta = `SELECT id_auto, GENERALT.id_proceso_siguiente, fecha_actual, hora_actual, observacion_mecanico, CONCAT(U.NOMBRES,' ',U.APELLIDOS) mecanico FROM 
   ((SELECT id_proceso inicio, id_proceso id_proceso_siguiente FROM PROCESOMANTENIMIENTO P LIMIT 50)
   UNION

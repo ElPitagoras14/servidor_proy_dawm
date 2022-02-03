@@ -24,7 +24,14 @@ router.get("/:id", (req, res, next) => {
 
 //POST
 router.post("/", (req, res, next) => {
-  models.autos.create(req.body);
+  models.autos.create({
+      placa: req.body.placa,
+      marca: req.body.marca,
+      modelo: req.body.modelo,
+      color: req.body.color,
+      clave_llave: req.body.clave,
+      propietario: req.body.id_propietario
+  });
   res.redirect("/");
 });
 
